@@ -1,0 +1,44 @@
+{% extends "base_app.html" %}
+
+{% block title %}Editar: {{ equipamento.marca_modelo }}{% endblock %}
+
+{% block app_content %}
+<div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <h1 class="h5 mb-0">Editar Equipamento</h1>
+    </div>
+    <div class="card-body">
+        <h2 class="h4 text-muted mb-4">{{ equipamento.marca_modelo }}</h2>
+        
+        <form action="{{ url_for('atualizar_equipamento', id=equipamento.id) }}" method="POST" class="row g-3">
+            <div class="col-md-6">
+                <label for="marca_modelo" class="form-label">Marca / Modelo</label>
+                <input type="text" class="form-control" id="marca_modelo" name="marca_modelo" 
+                       value="{{ equipamento.marca_modelo }}" required>
+            </div>
+            
+            <div class="col-md-6">
+                <label for="local_instalado" class="form-label">Local Instalado</label>
+                <input type="text" class="form-control" id="local_instalado" name="local_instalado" 
+                       value="{{ equipamento.local_instalado }}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="capacidade_btu" class="form-label">Capacidade em BTUs</label>
+                <input type="number" class="form-control" id="capacidade_btu" name="capacidade_btu"
+                       value="{{ equipamento.capacidade_btu if equipamento.capacidade_btu is not none else '' }}">
+            </div>
+
+            <div class="col-md-6">
+                <label for="proxima_manutencao" class="form-label">Próxima Manutenção</label>
+                <input type="date" class="form-control" id="proxima_manutencao" name="proxima_manutencao"
+                       value="{{ equipamento.proxima_manutencao.strftime('%Y-%m-%d') if equipamento.proxima_manutencao else '' }}">
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-warning">Atualizar Equipamento</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
