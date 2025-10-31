@@ -1,0 +1,135 @@
+{% extends "base_app.html" %}
+
+{% block title %}Relatórios de Manutenção{% endblock %}
+
+{% block app_content %}
+<h1 class="h2 mb-4">Relatórios</h1>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <h2 class="h5 mb-0">Resumo Geral</h2>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title h6 text-primary">Total Gasto (Serviços + Peças)</h3>
+                        <p class="card-text h4">R$ {{ "%.2f"|format(totais.gasto_total) }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title h6 text-primary">Custo Total de Peças</h3>
+                        <p class="card-text h4">R$ {{ "%.2f"|format(totais.gasto_pecas) }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title h6 text-primary">Custo Total de Serviços</h3>
+                        <p class="card-text h4">R$ {{ "%.2f"|format(totais.gasto_servicos) }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title h6 text-primary">Total de Manutenções</h3>
+                        <p class="card-text h4">{{ totais.count_total }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title h6 text-primary">Manutenções Preventivas</h3>
+                        <p class="card-text h4">{{ totais.count_preventivas }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h3 class="card-title h6 text-primary">Manutenções Corretivas</h3>
+                        <p class="card-text h4">{{ totais.count_corretivas }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Manutenções por Aparelho</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Equipamento (Local)</th>
+                                <th>Marca/Modelo</th>
+                                <th>Nº de Serviços</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for equipamento, contagem in relatorio_equipamentos %}
+                            <tr>
+                                <td>{{ equipamento.local_instalado }}</td>
+                                <td>{{ equipamento.marca_modelo }}</td>
+                                <td>{{ contagem }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center">Nenhum equipamento cadastrado.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Peças Substituídas</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Data</th>
+                                <th>Equipamento (Local)</th>
+                                <th>Descrição das Peças</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for servico in servicos_com_pecas %}
+                            <tr>
+                                <td>{{ servico.data_execucao.strftime('%d/%m/%Y') }}</td>
+                                <td>{{ servico.equipamento.local_instalado }}</td>
+                                <td>{{ servico.quais_pecas }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center">Nenhuma reposição de peças registada.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
