@@ -1,0 +1,74 @@
+{% extends "base_app.html" %}
+
+{% block title %}Editar Serviço{% endblock %}
+
+{% block app_content %}
+<div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <h1 class="h5 mb-0">Editar Serviço</h1>
+    </div>
+    <div class="card-body">
+        <h2 class="h4 text-muted mb-4">
+            {{ servico.equipamento.marca_modelo }} ({{ servico.equipamento.local_instalado }})
+        </h2>
+        
+        <form action="{{ url_for('atualizar_servico', id=servico.id) }}" method="POST" class="row g-3">
+            <div class="col-md-4">
+                <label for="data_execucao" class="form-label">Data Execução</label>
+                <input type="date" class="form-control" id="data_execucao" name="data_execucao" 
+                       value="{{ servico.data_execucao.strftime('%Y-%m-%d') }}" required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="tipo_servico" class="form-label">Tipo</label>
+                <select id="tipo_servico" name="tipo_servico" class="form-select" required>
+                    <option value="Preventivo" {% if servico.tipo_servico == 'Preventivo' %}selected{% endif %}>Preventivo</option>
+                    <option value="Corretivo" {% if servico.tipo_servico == 'Corretivo' %}selected{% endif %}>Corretivo</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label for="prestador_servico" class="form-label">Prestador</label>
+                <input type="text" class="form-control" id="prestador_servico" name="prestador_servico" 
+                       value="{{ servico.prestador_servico if servico.prestador_servico }}">
+            </div>
+
+            <div class="col-md-8">
+                <label for="descricao" class="form-label">Descrição</label>
+                <textarea class="form-control" id="descricao" name="descricao" rows="2">{{ servico.descricao if servico.descricao }}</textarea>
+            </div>
+
+            <div class="col-md-4 align-self-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="houve_reposicao_pecas" name="houve_reposicao_pecas"
+                           {% if servico.houve_reposicao_pecas %}checked{% endif %}>
+                    <label class="form-check-label" for="houve_reposicao_pecas">
+                        Houve Peças?
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label for="quais_pecas" class="form-label">Quais Peças?</label>
+                <textarea class="form-control" id="quais_pecas" name="quais_pecas" rows="2">{{ servico.quais_pecas if servico.quais_pecas }}</textarea>
+            </div>
+            
+            <div class="col-md-6">
+                <label for="valor_servico" class="form-label">Valor Serviço</label>
+                <input type="number" step="0.01" class="form-control" id="valor_servico" name="valor_servico" 
+                       value="{{ servico.valor_servico }}">
+            </div>
+
+            <div class="col-md-6">
+                <label for="valor_pecas" class="form-label">Valor Peças</label>
+                <input type="number" step="0.01" class="form-control" id="valor_pecas" name="valor_pecas"
+                       value="{{ servico.valor_pecas }}">
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-warning">Atualizar Serviço</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
