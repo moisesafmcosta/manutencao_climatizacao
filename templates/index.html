@@ -1,0 +1,87 @@
+{% extends "base_app.html" %}
+
+{% block title %}Gestão de Equipamentos{% endblock %}
+
+{% block app_content %}
+<h1 class="h2 mb-4">Gestão de Equipamentos</h1>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <h2 class="h5 mb-0">Cadastrar Novo Equipamento</h2>
+    </div>
+    <div class="card-body">
+        <form action="/equipamento/add" method="POST" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label for="marca_modelo" class="form-label">Marca / Modelo (Item 1.1)</label>
+                <input type="text" class="form-control" id="marca_modelo" name="marca_modelo" required>
+            </div>
+            
+            <div class="col-md-6">
+                <label for="local_instalado" class="form-label">Local Instalado (Item 1.3)</label>
+                <input type="text" class="form-control" id="local_instalado" name="local_instalado" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="capacidade_btu" class="form-label">Capacidade em BTUs (Item 1.2)</label>
+                <input type="number" class="form-control" id="capacidade_btu" name="capacidade_btu">
+            </div>
+
+            <div class="col-md-6">
+                <label for="proxima_manutencao" class="form-label">Próxima Manutenção (Item 4.1)</label>
+                <input type="date" class="form-control" id="proxima_manutencao" name="proxima_manutencao">
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Cadastrar Equipamento</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h2 class="h5 mb-0">Equipamentos Cadastrados</h2>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Marca/Modelo</th>
+                        <th scope="col">Local</th>
+                        <th scope="col">BTUs</th>
+                        <th scope="col">Próxima Manutenção</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for eq in equipamentos %}
+                    <tr>
+                        <td>{{ eq.id }}</td>
+                        <td>{{ eq.marca_modelo }}</td>
+                        <td>{{ eq.local_instalado }}</td>
+                        <td>{{ eq.capacidade_btu }}</td>
+                        <td>{{ eq.proxima_manutencao.strftime('%d/%m/%Y') if eq.proxima_manutencao else 'N/D' }}</td>
+                        
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('detalhe_equipamento', id=eq.id) }}" class="btn btn-info btn-sm">Ver</a>
+                                <a href="{{ url_for('editar_equipamento', id=eq.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                <form action="{{ url_for('apagar_equipamento', id=eq.id) }}" method="POST" onsubmit="return confirm('Tem a certeza que quer apagar este equipamento e TODOS os seus serviços associados?');" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm">Apagar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">Nenhum equipamento cadastrado ainda.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
